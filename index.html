@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeons & Friends - D&D Tools</title>
+    <style>
+        /* Font gotico medievale */
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #e0d8b0;
+            font-family: 'MedievalSharp', cursive;
+            background-image: url('assets/grunge-certificate-with-vintage-ornamental-frame.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Menu Hamburger */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #e0d8b0;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            border-right: 2px solid #5a0000;
+            z-index: 99;
+            transition: all 0.3s;
+            padding-top: 70px;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu a {
+            display: block;
+            color: #e0d8b0;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .custom-link {
+    color: red;
+    text-decoration: none;
+        }
+
+
+        .menu a:hover {
+            background: #5a0000;
+        }
+
+        /* Hero Section con portal fantasy */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('assets/fantasy-style-gateway-portal-with-desert-landscape.jpg');
+            background-size: cover;
+            background-position: center;
+            border-bottom: 3px solid #5a0000;
+            position: relative;
+            min-height: 60vh;
+        }
+
+        .hero h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 5rem;
+            margin: 0;
+            text-shadow: 3px 3px 10px #800000;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1rem auto;
+        }
+
+        /* Attribuzione Freepik */
+        .attribution {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.7rem;
+            color: #aaa;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .attribution a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+
+        /* Contenuto principale */
+        .content {
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #3d3d3d;
+        }
+
+        /* Footer dark medievale */
+        footer {
+            background: #111;
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #5a0000;
+            font-family: 'MedievalSharp', cursive;
+            position: relative;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* Bottoni stile D&D */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #5a0000;
+            color: #e0d8b0;
+            text-decoration: none;
+            border: 1px solid #800000;
+            border-radius: 0;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #800000;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Hamburger -->
+    <div class="menu-btn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="#">Home</a>
+        <a href="generator.html">Generatori</a>
+        <a href="#database">Database</a>
+        <a href="#homebrew">Homebrew</a>
+        <a href="#dm-tools">Strumenti per DM</a>
+        <a href="community.html">Community</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="attribution">
+            Image by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer">Freepik</a>
+        </div>
+        <h1>DUNGEONS & FRIENDS</h1>
+        <p>Forgia il tuo destino con strumenti per avventure epiche</p>
+        <a href="#generators" class="btn">Esplora i Generatori</a>
+    </header>
+
+    <!-- Contenuto Principale -->
+    <main class="content">
+        <h2>Benvenuto, Avventuriero!</h2>
+        <p>Questo sito è dedicato a maestri e giocatori di Dungeons & Dragons. Troverai generatori casuali, risorse e community per rendere le tue campagne leggendarie.</p>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Dungeons & Friends &copy; 2024 - Tutti i diritti riservati</p>
+        <p class="copyright">Dungeons & Dragons è un marchio registrato di Wizards of the Coast. Questo sito non è affiliato. (tutte le immagini usate sono provenienti da freepik.com)</p>
+        <p><a href="/privacy" class="custom-link">Privacy Policy</a> | <a href="community.html" class="custom-link">Contatti</a></p>
+        <div class="attribution"> 
+            Background by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer">Freepik</a>
+        </div>
+    </footer>
+
+    <script>
+        // Funzione per il menu hamburger
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+            
+            // Animazione dei span (opzionale)
+            const spans = document.querySelectorAll('.menu-btn span');
+            if (menu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans.forEach(span => {
+                    span.style.transform = '';
+                    span.style.opacity = '';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

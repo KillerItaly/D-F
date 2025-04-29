@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatori - Dungeons & Friends</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #e0d8b0;
+            font-family: 'MedievalSharp', cursive;
+            background-image: url('assets/grunge-certificate-with-vintage-ornamental-frame.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Menu Hamburger */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #e0d8b0;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            border-right: 2px solid #5a0000;
+            z-index: 99;
+            transition: all 0.3s;
+            padding-top: 70px;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu a {
+            display: block;
+            color: #e0d8b0;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .menu a:hover {
+            background: #5a0000;
+        }
+
+        /* Contenuto Generatori */
+        .content {
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #3d3d3d;
+            margin-top: 80px;
+        }
+
+        h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            color: #d4af37;
+            text-align: center;
+            font-size: 3rem;
+            border-bottom: 2px solid #5a0000;
+            padding-bottom: 10px;
+            margin-bottom: 2rem;
+        }
+
+        /* Sezione Generatori */
+        .generators-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .generator-card {
+            background: rgba(26, 13, 0, 0.7);
+            border: 2px solid #5a0000;
+            padding: 20px;
+            transition: all 0.3s;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .generator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .generator-title {
+            font-size: 1.5rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .generator-desc {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .generator-btn {
+            display: block;
+            background: #5a0000;
+            color: #e0d8b0;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            border: none;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .generator-btn:hover {
+            background: #800000;
+        }
+
+        .coming-soon {
+            text-align: center;
+            font-style: italic;
+            color: #aaa;
+            margin-top: 2rem;
+        }
+
+        /* Modal/Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(10, 10, 10, 0.9);
+            border: 3px solid #5a0000;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #e0d8b0;
+            cursor: pointer;
+            background: #5a0000;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            background: #800000;
+        }
+
+        .modal-title {
+            font-family: 'UnifrakturMaguntia', cursive;
+            color: #d4af37;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .generator-result {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .generate-again-btn {
+            background: #5a0000;
+            color: #e0d8b0;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-family: 'MedievalSharp', cursive;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+
+        .generate-again-btn:hover {
+            background: #800000;
+        }
+
+        /* Origin Selector - Stile migliorato */
+.origin-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 20px;
+}
+
+.origin-arrow {
+    font-size: 3rem; /* Freccie più grandi */
+    cursor: pointer;
+    color: #FFA500; /* Colore arancione */
+    padding: 0 20px;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: transform 0.2s;
+}
+
+.origin-arrow:hover {
+    color: #FFD700; /* Arancione più chiaro al hover */
+    transform: scale(1.1);
+}
+
+.origin-display {
+    min-width: 250px; /* Più largo */
+    text-align: center;
+    font-size: 1.8rem; /* Testo più grande */
+    padding: 15px 30px;
+    background: rgba(90, 0, 0, 0.5);
+    border-radius: 8px;
+    border: 2px solid #FFA500; /* Bordo arancione */
+    color: #FFA500; /* Testo arancione */
+}
+
+/* Name Result - Stile migliorato */
+.name-result {
+    text-align: center;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(26, 13, 0, 0.7);
+    border-radius: 8px;
+    border: 2px solid #FFA500;
+}
+
+.name-generated {
+    font-size: 2.5rem; /* Molto più grande */
+    color: #FFA500; /* Arancione */
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.meaning {
+    font-style: italic;
+    color: #FFD700; /* Giallo/arancione chiaro */
+    font-size: 1.4rem;
+}
+
+        /* Modal Content - Centratura migliore */
+        .modal-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .travel-calculator-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.travel-selector {
+    margin-bottom: 25px;
+}
+
+.selector-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.path-description {
+    font-style: italic;
+    color: #FFD700;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.distance-input {
+    margin: 25px 0;
+    text-align: center;
+}
+
+.distance-input label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.distance-input input {
+    background: rgba(90, 0, 0, 0.5);
+    border: 2px solid #FFA500;
+    color: #FFA500;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    width: 150px;
+    text-align: center;
+    font-family: 'MedievalSharp', cursive;
+}
+    </style>
+    <script src="assets/js/nomi-database.js"></script>
+    <script src="assets/js/enigmi-database.js"></script>
+    <script src="assets/js/spellDatabase.js"></script>
+    <script src="assets/js/travel-calculator.js"></script>
+</head>
+
+<body>
+    <!-- Menu Hamburger -->
+    <div class="menu-btn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="generator.html">Generatori</a>
+        <a href="#database">Database</a>
+        <a href="#homebrew">Homebrew</a>
+        <a href="#dm-tools">Strumenti per DM</a>
+        <a href="community.html">Community</a>
+    </nav>
+
+    <!-- Contenuto Generatori -->
+    <main class="content">
+        <h1>GENERATORI</h1>
+        
+        <div class="generators-container">
+            <!-- Card Generatore Nomi -->
+            <div class="generator-card">
+                <h3 class="generator-title">Generatore Nomi</h3>
+                <p class="generator-desc">Genera nomi per personaggi basati su diverse culture fantasy con significato.</p>
+                <button class="generator-btn" onclick="openNameGenerator()">Genera</button>
+            </div>
+
+            <div class="generator-card">
+                <h3 class="generator-title">Generatore di Enigmi</h3>
+                <p class="generator-desc">Ottieni enigmi misteriosi con relative risposte per i tuoi dungeon!</p>
+                <button class="generator-btn" onclick="openRiddleGenerator()">Genera</button>
+            </div>
+            
+            <!-- Modal per il generatore di enigmi -->
+            <div class="modal-overlay" id="riddleGeneratorModal">
+                <div class="modal-content">
+                    <span class="modal-close" onclick="closeModal()">X</span>
+                    <h2 class="modal-title">Generatore di Enigmi</h2>
+                    <div class="generator-result">
+                        <div class="name-result">
+                            <div class="name-generated" id="riddleText"></div>
+                            <div class="meaning" id="riddleAnswer" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <button class="generate-again-btn" onclick="showAnswer()" id="showAnswerBtn">Mostra Risposta</button>
+                    <button class="generate-again-btn" onclick="generateRiddle()" id="newRiddleBtn" style="display: none;">Nuovo Enigma</button>
+                </div>
+            </div>
+
+            <div class="generator-card">
+                <h3 class="generator-title">Generatore Incantesimi</h3>
+                <p class="generator-desc">Crea incantesimi personalizzati con effetto e componenti magici.</p>
+                <button class="generator-btn" onclick="openSpellGenerator()">Genera</button>
+            </div>
+
+            <div class="generator-card">
+                <h3 class="generator-title">Calcolatore di Viaggio</h3>
+                <p class="generator-desc">Calcola il tempo di percorrenza in base al tipo di percorso e mezzo di trasporto.</p>
+                <button class="generator-btn" onclick="openTravelCalculator()">Apri Calcolatore</button>
+            </div>
+            
+            <!-- Altri generatori... -->
+        </div>
+    </main>
+
+<!-- Modal/Popup Generatore Nomi -->
+<div class="modal-overlay" id="nameGeneratorModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">X</span>
+        <h2 class="modal-title">Generatore Nomi</h2>
+        
+        <!-- Origin Selector migliorato -->
+        <div class="origin-selector">
+            <div class="origin-arrow" onclick="changeOrigin(-1)">&#10094;</div>
+            <div class="origin-display" id="currentOrigin">Elfo</div>
+            <div class="origin-arrow" onclick="changeOrigin(1)">&#10095;</div>
+        </div>
+        
+        <!-- Name Result migliorato -->
+        <div class="generator-result">
+            <div class="name-result">
+                <div class="name-generated" id="generatedName"></div>
+                <div class="meaning" id="nameMeaning"></div>
+            </div>
+        </div>
+        
+        <button class="generate-again-btn" onclick="generateName()">Genera un altro nome</button>
+    </div>
+</div>
+<!-- Modal/Popup Generatore Incantesimi -->
+<div class="modal-overlay" id="spellGeneratorModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">X</span>
+        <h2 class="modal-title">Incantesimo Homebrew</h2>
+
+        <div class="generator-result">
+            <div class="name-result">
+                <div class="name-generated" id="spellName">---</div>
+                <div class="meaning" id="spellEffect">---</div>
+                <div class="meaning" id="spellComponents" style="color:#FF8C00; font-size:1.2rem;"></div>
+            </div>
+        </div>
+
+        <button class="generate-again-btn" onclick="generateSpell()">Genera un altro incantesimo</button>
+    </div>
+</div>
+<!-- Modal/Popup Calcolatore Viaggio -->
+<div class="modal-overlay" id="travelCalculatorModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">X</span>
+        <h2 class="modal-title">Calcolatore di Viaggio</h2>
+        
+        <div class="travel-calculator-container">
+            <!-- Selettore tipo percorso -->
+            <div class="travel-selector">
+                <label>Tipo di percorso:</label>
+                <div class="selector-controls">
+                    <div class="origin-arrow" onclick="changePathType(-1)">&#10094;</div>
+                    <div class="origin-display" id="currentPathType">Tortuoso</div>
+                    <div class="origin-arrow" onclick="changePathType(1)">&#10095;</div>
+                </div>
+                <div class="path-description" id="pathDescription"></div>
+            </div>
+            
+            <!-- Selettore mezzo di trasporto -->
+            <div class="travel-selector">
+                <label>Mezzo di trasporto:</label>
+                <div class="selector-controls">
+                    <div class="origin-arrow" onclick="changeTravelMode(-1)">&#10094;</div>
+                    <div class="origin-display" id="currentTravelMode">A piedi</div>
+                    <div class="origin-arrow" onclick="changeTravelMode(1)">&#10095;</div>
+                </div>
+                <div class="path-description" id="travelModeDescription"></div>
+            </div>
+            
+            <!-- Input distanza -->
+            <div class="distance-input">
+                <label for="travelDistance">Distanza (km):</label>
+                <input type="number" id="travelDistance" min="0" step="0.1" value="10">
+            </div>
+            
+            <!-- Risultato -->
+            <div class="name-result">
+                <div class="name-generated" id="travelResult">Inserisci i dati e calcola</div>
+            </div>
+            
+            <button class="generate-again-btn" onclick="calculateTravel()">Calcola</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // Variabili globali
+        const origins = Object.keys(nameDatabase);
+        let currentOriginIndex = 0;
+        let currentOrigin = origins[currentOriginIndex];
+
+        // Funzione per aprire il generatore di nomi
+        function openNameGenerator() {
+            document.getElementById('nameGeneratorModal').style.display = 'flex';
+            updateOriginDisplay();
+            generateName();
+        }
+
+        // Funzione per chiudere il modal
+        function closeModal() {
+            document.getElementById('nameGeneratorModal').style.display = 'none';
+            document.getElementById('riddleGeneratorModal').style.display = 'none';
+            document.getElementById('spellGeneratorModal').style.display = 'none';
+            document.getElementById('travelCalculatorModal').style.display = 'none';
+        }
+
+        // Cambia origine con le frecce
+        function changeOrigin(direction) {
+            currentOriginIndex += direction;
+            
+            if (currentOriginIndex >= origins.length) {
+                currentOriginIndex = 0;
+            } else if (currentOriginIndex < 0) {
+                currentOriginIndex = origins.length - 1;
+            }
+            
+            currentOrigin = origins[currentOriginIndex];
+            updateOriginDisplay();
+            generateName();
+        }
+
+        // Aggiorna la visualizzazione dell'origine
+        function updateOriginDisplay() {
+            const originDisplay = document.getElementById('currentOrigin');
+            originDisplay.textContent = currentOrigin.charAt(0).toUpperCase() + currentOrigin.slice(1);
+        }
+
+        // Genera un nome casuale
+        function generateName() {
+            const names = nameDatabase[currentOrigin];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            
+            document.getElementById('generatedName').textContent = randomName.name;
+        }
+
+        // Menu hamburger
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+            
+            const spans = document.querySelectorAll('.menu-btn span');
+            if (menu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans.forEach(span => {
+                    span.style.transform = '';
+                    span.style.opacity = '';
+                });
+            }
+        }
+
+        // Chiudi il modal con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        // Variabili globali per gli enigmi
+        let currentRiddle = null;
+
+        // Apri il generatore di enigmi
+        function openRiddleGenerator() {
+            document.getElementById('riddleGeneratorModal').style.display = 'flex';
+            generateRiddle();
+        }
+
+        // Genera un enigma casuale
+        function generateRiddle() {
+            const randomIndex = Math.floor(Math.random() * riddleDatabase.length);
+            currentRiddle = riddleDatabase[randomIndex];
+    
+            document.getElementById('riddleText').textContent = currentRiddle.riddle;
+            document.getElementById('riddleAnswer').textContent = "Risposta: " + currentRiddle.answer;
+            document.getElementById('riddleAnswer').style.display = 'none';
+            document.getElementById('showAnswerBtn').style.display = 'block';
+            document.getElementById('newRiddleBtn').style.display = 'none';
+        }
+
+        // Mostra la risposta
+        function showAnswer() {
+            document.getElementById('riddleAnswer').style.display = 'block';
+            document.getElementById('showAnswerBtn').style.display = 'none';
+            document.getElementById('newRiddleBtn').style.display = 'block';
+        }
+
+        function openSpellGenerator() {
+            document.getElementById('spellGeneratorModal').style.display = 'flex';
+            generateSpell();
+        }
+
+        function generateSpell() {
+            const spell = spellDatabase[Math.floor(Math.random() * spellDatabase.length)];
+            document.getElementById('spellName').textContent = spell.name;
+            document.getElementById('spellEffect').textContent = spell.effect;
+            document.getElementById('spellComponents').textContent = "Componenti: " + spell.components;
+        }
+
+        // Variabili per il calcolatore di viaggio
+let currentPathType = 'tortuoso';
+let currentTravelMode = 'lento';
+
+// Apri il calcolatore di viaggio
+function openTravelCalculator() {
+    document.getElementById('travelCalculatorModal').style.display = 'flex';
+    updatePathTypeDisplay();
+    updateTravelModeDisplay();
+}
+
+// Cambia tipo percorso
+function changePathType(direction) {
+    const pathTypes = Object.keys(travelCalculator.pathTypes);
+    const currentIndex = pathTypes.indexOf(currentPathType);
+    let newIndex = currentIndex + direction;
+    
+    if (newIndex >= pathTypes.length) newIndex = 0;
+    if (newIndex < 0) newIndex = pathTypes.length - 1;
+    
+    currentPathType = pathTypes[newIndex];
+    updatePathTypeDisplay();
+}
+
+// Aggiorna display tipo percorso
+function updatePathTypeDisplay() {
+    document.getElementById('currentPathType').textContent = 
+        currentPathType.charAt(0).toUpperCase() + currentPathType.slice(1);
+    document.getElementById('pathDescription').textContent = 
+        travelCalculator.pathTypes[currentPathType].description;
+}
+
+// Cambia mezzo di trasporto
+function changeTravelMode(direction) {
+    const travelModes = Object.keys(travelCalculator.travelModes);
+    const currentIndex = travelModes.indexOf(currentTravelMode);
+    let newIndex = currentIndex + direction;
+    
+    if (newIndex >= travelModes.length) newIndex = 0;
+    if (newIndex < 0) newIndex = travelModes.length - 1;
+    
+    currentTravelMode = travelModes[newIndex];
+    updateTravelModeDisplay();
+}
+
+// Aggiorna display mezzo di trasporto
+function updateTravelModeDisplay() {
+    const displayName = {
+        lento: "passo lento",
+        camminata: "Camminata",
+        corsaLenta: "Corsa lenta",
+        corsaVeloce: "Corsa veloce",
+        cavallo: "A cavallo moderato",
+        cavallo2: "A cavallo in corsa",
+        carro: "Su carro"
+    };
+    
+    document.getElementById('currentTravelMode').textContent = displayName[currentTravelMode];
+    document.getElementById('travelModeDescription').textContent = 
+        travelCalculator.travelModes[currentTravelMode].description;
+}
+
+// Esegui il calcolo
+function calculateTravel() {
+    const distance = parseFloat(document.getElementById('travelDistance').value);
+    const result = travelCalculator.calculateTravelTime(distance, currentPathType, currentTravelMode);
+    document.getElementById('travelResult').textContent = travelCalculator.formatResult(result);
+}
+
+// Assicurati di aggiornare la funzione closeModal per includere il nuovo modal
+function closeModal() {
+    document.getElementById('nameGeneratorModal').style.display = 'none';
+    document.getElementById('riddleGeneratorModal').style.display = 'none';
+    document.getElementById('spellGeneratorModal').style.display = 'none';
+    document.getElementById('travelCalculatorModal').style.display = 'none';
+}
+
+    </script>
+        <script 
+        src="https://bots.easy-peasy.ai/chat.min.js" 
+        data-chat-url="https://bots.easy-peasy.ai/bot/4eda791d-6776-4976-bb1c-246043b936b5" 
+        data-btn-position="bottom-right"
+        data-widget-btn-color="#6366f1"
+        defer>
+        </script>
+</body>
+</html>

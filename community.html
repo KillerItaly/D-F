@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Dungeons & Friends</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #e0d8b0;
+            font-family: 'MedievalSharp', cursive;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Menu Hamburger (stesso stile della homepage) */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #e0d8b0;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            border-right: 2px solid #5a0000;
+            z-index: 99;
+            transition: all 0.3s;
+            padding-top: 70px;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu a {
+            display: block;
+            color: #e0d8b0;
+            padding: 12px 20px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .menu a:hover {
+            background: #5a0000;
+        }
+
+        /* Contenuto Community */
+        .content {
+            padding: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            margin-top: 80px;
+            background-image: url('assets/v884-bird-21.jpg');
+            background-size: 100% 100%; /* Adattamento perfetto */
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 3px solid #5a0000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            color: #ffffff; /* Testo scuro per leggibilità */
+            background-blend-mode: multiply; /* tonalità più scura */
+            background-color: rgba(0, 0, 0, 0.4); /* ulteriore contrasto */
+        }
+
+
+        h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            color: #ffffff;
+            text-align: center;
+            font-size: 3rem;
+            padding-bottom: 10px;
+            margin-top: 8rem;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: row; /* immagine a destra */
+            align-items: center;
+            justify-content: center; /* centra tutto orizzontalmente */
+            gap: 80px; /* spazio tra immagine e testo */
+            position: relative;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+
+        .profile-text {
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #5a0000;
+            object-fit: cover;
+        }
+
+        /* Sezione Risorse della Community - Centrata */
+        .link-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem 0;
+        }
+
+        .link-section h2 {
+            text-align: center;
+            margin: 0 auto 1.5rem auto; /* Centratura orizzontale con margine sotto */
+            width: 100%; /* Occupa tutta la larghezza */
+            color: #ffffff;
+            font-size: 1.8rem; /* Opzionale: regola dimensione */
+            position: relative; /* Per eventuali decorazioni */
+        }       
+
+        .section-title {
+            position: relative;
+            text-align: center;
+            font-size: 2rem;
+            color: #ffffff;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background-color: #5a0000;
+        }
+
+
+        .link-grid {
+            display: flex;
+            flex-direction: row;  /* Imposta esplicitamente la direzione orizzontale */
+            justify-content: center;  /* Centra gli elementi orizzontalmente */
+            align-items: center;  /* Allinea verticalmente al centro (opzionale) */
+            gap: 40px;  /* Spazio tra le icone */
+            flex-wrap: wrap;  /* Permette il wrapping su schermi piccoli */
+        }
+
+        .link-item {
+            display: flex;
+            flex-direction: column;  /* Mantiene testo sotto l'icona */
+            align-items: center;  /* Centra il contenuto */
+            transition: transform 0.3s;
+        }
+
+        .link-item:hover {
+            transform: scale(1.1);
+        }
+
+        .link-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #180800;
+            object-fit: cover;
+        }
+
+        /* Sezione Social - Ingrandita con cerchi */
+        .social-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .social-item:hover {
+            transform: scale(1.1);
+        }
+
+        .social-icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #5a0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(26, 13, 0, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .social-name {
+            font-size: 0.9rem;
+            color: #ffffff;
+            max-width: 100px;
+            text-align: center;
+        }
+
+        /* Titolo Contattami */
+        .contact-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #180800;
+            position: relative;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-title::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background-color: #5a0000;
+        }
+
+        /* Form di contatto con margine alzato */
+        .contact-form {
+            background: rgba(26, 13, 0, 0.7);
+            padding: 20px;
+            border: 1px solid #5a0000;
+            max-width: 600px;
+            margin: 0 auto 3rem auto; /* centrato e più vicino */
+        }
+
+        .contact-form input, 
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #1a0d00;
+            border: 1px solid #5a0000;
+            color: #e0d8b0;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .contact-form button {
+            background: #5a0000;
+            color: #e0d8b0;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'MedievalSharp', cursive;
+            width: 100%;
+        }
+
+        .contact-form button:hover {
+            background: #800000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Hamburger -->
+    <div class="menu-btn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="generator.html">Generatori</a>
+        <a href="#database">Database</a>
+        <a href="#homebrew">Homebrew</a>
+        <a href="#dm-tools">Strumenti per DM</a>
+        <a href="community.html">Community</a>
+    </nav>
+
+    <!-- Contenuto Community -->
+    <main class="content">
+        <h1>LA NOSTRA COMMUNITY</h1>
+        
+        <!-- Presentazione -->
+        <section class="profile">
+            <div class="profile-text">
+                <h2>Il Mastro del Dungeon</h2>
+                <p>(del testo)</p>
+                <p>(altro testo)</p>
+            </div>
+            <img src="assets/link/circle7.png" alt="Il Mastro del Dungeon" class="profile-img">
+        </section>
+
+        <!-- Link Utili (immagini circolari) -->
+        <div class="link-section">
+        <h2 class="section-title">Risorse della Community (in sviluppo)</h2>
+        <div class="link-grid">
+            <a href="#dm-tools" class="link-item">
+                <img src="assets/link/circle1.png" alt="Strumenti per DM" class="link-img">
+                <p>Strumenti per DM</p>
+            </a>
+            <a href="#database" class="link-item">
+                <img src="assets/link/circle2.png" alt="Mappe Condivise" class="link-img">
+                <p>Mappe Condivise</p>
+            </a>
+            <a href="https://www.twitch.tv/killerit_twm" target="_blank" rel="noopener noreferrer" class="social-item">
+                <img src="assets/link/circle5.png" alt="Eventi Live" class="link-img">
+                <p>Eventi Live</p>
+            </a>
+        </div>
+        </div>
+
+        <!-- Social -->
+        <div class="social-section">
+            <h2 class="section-title">I Miei Social</h2>
+            <div class="social-links">
+                <a href="https://www.twitch.tv/killerit_twm" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle5.png" alt="Twitch" class="social-icon">
+                    </div>
+                    <span class="social-name">Twitch</span>
+                </a>
+                
+                <a href="https://www.youtube.com/channel/UC3ZIm6u7qacyUK1hGt7n_9w" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle4.png" alt="YouTube" class="social-icon">
+                    </div>
+                    <span class="social-name">YouTube</span>
+                </a>
+                
+                <a href="https://ko-fi.com/manage/index?method=externallogin" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle2.png" alt="Ko-fi" class="social-icon">
+                    </div>
+                    <span class="social-name">Ko-fi</span>
+                </a>
+                
+                <a href="https://www.reddit.com/r/KillerIT_TWMComunity/" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle3.png" alt="Reddit" class="social-icon">
+                    </div>
+                    <span class="social-name">Reddit</span>
+                </a>
+                
+                <a href="https://www.rankone.global/killerit" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle6.png" alt="RankOne" class="social-icon">
+                    </div>
+                    <span class="social-name">RankOne</span>
+                </a>
+                
+                <a href="https://discord.gg/Emes8f6puw" target="_blank" rel="noopener noreferrer" class="social-item">
+                    <div class="social-icon-container">
+                        <img src="assets/link/circle1.png" alt="Discord" class="social-icon">
+                    </div>
+                    <span class="social-name">Discord</span>
+                </a>
+                
+            </div>
+        </div>
+
+        <!-- Contatti -->
+        <h2 class="section-title">Contattami</h2>
+        <div class="contact-form">
+            <form action="https://formsubmit.co/biyigilo@mailgolem.com" method="POST">
+                <input type="text" name="name" placeholder="Il tuo nome" required>
+                <input type="email" name="email" placeholder="La tua email" required>
+                <textarea name="message" placeholder="Il tuo messaggio" rows="5" required></textarea>
+                <input type="hidden" name="_next" value="https://tuosito.com/grazie.html"> <!-- Pagina di ringraziamento -->
+                <input type="hidden" name="_subject" value="Nuovo messaggio dal sito Dungeons & Friends">
+                <input type="hidden" name="_captcha" value="false">
+                <button type="submit">Invia Messaggio</button>
+            </form>
+        </div>
+        <div class="attribution"> 
+            Background by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer">Freepik</a>
+        </div>
+    </main>
+
+    <script>
+        // Funzione per il menu hamburger (uguale alla homepage)
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+            
+            const spans = document.querySelectorAll('.menu-btn span');
+            if (menu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans.forEach(span => {
+                    span.style.transform = '';
+                    span.style.opacity = '';
+                });
+            }
+        }
+    </script>
+</body>
+</html>
