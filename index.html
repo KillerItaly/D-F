@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dungeons & Friends - D&D Tools</title>
@@ -164,6 +167,49 @@
             background: #800000;
             transform: scale(1.05);
         }
+        /* Stili per l'autenticazione */
+#auth-modal div {
+    font-family: 'MedievalSharp', cursive;
+}
+
+#auth-modal input {
+    font-family: 'MedievalSharp', cursive;
+    margin-bottom: 1rem;
+}
+
+#auth-modal button {
+    font-family: 'MedievalSharp', cursive;
+    transition: all 0.3s;
+}
+
+#auth-modal button:hover {
+    background: #800000 !important;
+}
+
+#user-profile {
+    font-family: 'MedievalSharp', cursive;
+}
+
+/* Pulsante Google */
+.google-signin-button {
+    background: #4285F4;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-signin-button:hover {
+    background: #357ABD;
+}
+    
     </style>
 </head>
 <body>
@@ -175,7 +221,7 @@
     </div>
 
     <nav class="menu" id="menu">
-        <a href="#">Home</a>
+        <a href="#index.html">Home</a>
         <a href="generator.html">Generatori</a>
         <a href="#database">Database</a>
         <a href="homebrew_camp.html">Homebrew</a>
@@ -190,14 +236,49 @@
         </div>
         <h1>DUNGEONS & FRIENDS</h1>
         <p>Forgia il tuo destino con strumenti per avventure epiche</p>
-        <a href="#generators" class="btn">Esplora i Generatori</a>
+        <a href="generator.html" class="btn">Esplora i Generatori</a>
     </header>
-
+    <!-- Sezione Autenticazione -->
+    <div id="auth-section" class="auth-section"></div>
     <!-- Contenuto Principale -->
     <main class="content">
         <h2>Benvenuto, Avventuriero!</h2>
         <p>Questo sito è dedicato a maestri e giocatori di Dungeons & Dragons. Troverai generatori casuali, risorse e community per rendere le tue campagne leggendarie.</p>
     </main>
+
+    <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 2rem; border: 2px solid #5a0000; max-width: 400px; width: 90%;">
+            <h2 style="margin-top: 0; color: #e0d8b0;">Accedi al Regno</h2>
+            
+            <div id="firebaseui-auth-container"></div>
+            
+            <div id="email-login" style="display: none;">
+                <input type="email" id="email" placeholder="Email" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; background: #333; color: #e0d8b0; border: 1px solid #5a0000;">
+                <input type="password" id="password" placeholder="Password" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; background: #333; color: #e0d8b0; border: 1px solid #5a0000;">
+                <button onclick="signInWithEmail()" style="background: #5a0000; color: #e0d8b0; border: none; padding: 0.5rem 1rem; cursor: pointer; width: 100%;">Accedi</button>
+                <p style="color: #e0d8b0; text-align: center; margin-top: 1rem;">Non hai un account? <a href="#" onclick="showRegister()" style="color: #d4af37; cursor: pointer;">Registrati</a></p>
+            </div>
+            
+            <div id="register" style="display: none;">
+                <input type="email" id="reg-email" placeholder="Email" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; background: #333; color: #e0d8b0; border: 1px solid #5a0000;">
+                <input type="password" id="reg-password" placeholder="Password" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; background: #333; color: #e0d8b0; border: 1px solid #5a0000;">
+                <button onclick="registerWithEmail()" style="background: #5a0000; color: #e0d8b0; border: none; padding: 0.5rem 1rem; cursor: pointer; width: 100%;">Registrati</button>
+                <p style="color: #e0d8b0; text-align: center; margin-top: 1rem;">Hai già un account? <a href="#" onclick="showLogin()" style="color: #d4af37; cursor: pointer;">Accedi</a></p>
+            </div>
+            
+            <button onclick="hideAuthModal()" style="margin-top: 1rem; background: transparent; color: #e0d8b0; border: 1px solid #5a0000; padding: 0.5rem 1rem; cursor: pointer; width: 100%;">Chiudi</button>
+        </div>
+    </div>
+
+    <!-- Aggiungi un pulsante di login nell'header -->
+    <button id="login-btn" style="position: fixed; top: 20px; right: 20px; z-index: 100; background: rgba(0, 0, 0, 0.7); border: 1px solid #5a0000; color: #e0d8b0; padding: 10px; border-radius: 3px; cursor: pointer; font-family: 'MedievalSharp', cursive;" onclick="showAuthModal()">Accedi</button>
+    
+    <!-- Aggiungi un elemento per mostrare lo stato dell'utente -->
+    <div id="user-profile" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 100; background: rgba(0, 0, 0, 0.7); border: 1px solid #5a0000; padding: 10px; border-radius: 3px; max-width: 200px;">
+        <img id="user-photo" style="width: 40px; height: 40px; border-radius: 50%; vertical-align: middle; margin-right: 10px;">
+        <span id="user-name" style="color: #e0d8b0; vertical-align: middle;"></span>
+        <button onclick="signOut()" style="display: block; margin-top: 5px; background: #5a0000; color: #e0d8b0; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">Esci</button>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -227,6 +308,117 @@
                     span.style.opacity = '';
                 });
             }
+        }
+    </script>
+    <script>
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCeuGQvEfydlVt2g8iuGTjW2eY3f75Braw",
+            authDomain: "scuola-progetto.firebaseapp.com",
+            projectId: "scuola-progetto",
+            storageBucket: "scuola-progetto.firebasestorage.app",
+            messagingSenderId: "1008294961950",
+            appId: "1:1008294961950:web:acc331d1a7746627079f0f",
+            measurementId: "G-5GEWLVLGYM"
+        };
+
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Gestione dell'autenticazione
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Utente loggato
+                document.getElementById('login-btn').style.display = 'none';
+                const userProfile = document.getElementById('user-profile');
+                userProfile.style.display = 'block';
+                
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+                if (user.photoURL) {
+                    document.getElementById('user-photo').src = user.photoURL;
+                } else {
+                    document.getElementById('user-photo').src = 'https://via.placeholder.com/40';
+                }
+            } else {
+                // Nessun utente loggato
+                document.getElementById('login-btn').style.display = 'block';
+                document.getElementById('user-profile').style.display = 'none';
+            }
+        });
+
+        // Funzioni per il modale di autenticazione
+        function showAuthModal() {
+            document.getElementById('auth-modal').style.display = 'flex';
+            showLogin();
+        }
+
+        function hideAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
+        function showLogin() {
+            document.getElementById('email-login').style.display = 'block';
+            document.getElementById('register').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('email-login').style.display = 'none';
+            document.getElementById('register').style.display = 'block';
+        }
+
+        // Autenticazione con Google
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(() => {
+                    hideAuthModal();
+                })
+                .catch((error) => {
+                    console.error("Errore durante l'autenticazione con Google:", error);
+                    alert("Errore durante l'autenticazione: " + error.message);
+                });
+        }
+
+        // Autenticazione con email/password
+        function signInWithEmail() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    hideAuthModal();
+                })
+                .catch((error) => {
+                    console.error("Errore durante l'accesso:", error);
+                    alert("Errore durante l'accesso: " + error.message);
+                });
+        }
+
+        // Registrazione con email/password
+        function registerWithEmail() {
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    hideAuthModal();
+                })
+                .catch((error) => {
+                    console.error("Errore durante la registrazione:", error);
+                    alert("Errore durante la registrazione: " + error.message);
+                });
+        }
+
+        // Logout
+        function signOut() {
+            auth.signOut()
+                .then(() => {
+                    console.log("Utente disconnesso");
+                })
+                .catch((error) => {
+                    console.error("Errore durante il logout:", error);
+                });
         }
     </script>
 </body>
