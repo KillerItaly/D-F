@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homebrew Campaign - Dungeons & Friends</title>
+    <style>
+        /* Stili esistenti dal tuo index.html */
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #e0d8b0;
+            font-family: 'MedievalSharp', cursive;
+            background-image: url('../assets/grunge-certificate-with-vintage-ornamental-frame.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Menu Hamburger */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #e0d8b0;
+            margin: 4px 0;
+            transition: all 0.3s;
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            border-right: 2px solid #5a0000;
+            z-index: 99;
+            transition: all 0.3s;
+            padding-top: 70px;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu a {
+            display: block;
+            color: #e0d8b0;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .menu a:hover {
+            background: #5a0000;
+        }
+
+        /* Contenuto principale */
+        .content {
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #3d3d3d;
+            min-height: 70vh;
+        }
+
+        /* Overlay di autenticazione */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .auth-message {
+            background: rgba(10, 10, 10, 0.9);
+            padding: 2rem;
+            border: 2px solid #5a0000;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .auth-message h2 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            color: #e0d8b0;
+            font-size: 2.5rem;
+            margin-top: 0;
+        }
+
+        .auth-message p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #5a0000;
+            color: #e0d8b0;
+            text-decoration: none;
+            border: 1px solid #800000;
+            border-radius: 0;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #800000;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #5a0000;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* Pulsante login/logout */
+        .user-auth-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5a0000;
+            color: #e0d8b0;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'MedievalSharp', cursive;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Hamburger -->
+    <div class="menu-btn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="generator.html">Generatori</a>
+        <a href="#database">Database</a>
+        <a href="homebrew_camp.html">Homebrew</a>
+        <a href="#dm-tools">Strumenti per DM</a>
+        <a href="community.html">Community</a>
+    </nav>
+
+    <!-- Pulsante login/logout -->
+    <button id="user-auth-btn" class="user-auth-btn" onclick="handleAuthButton()">Accedi</button>
+
+    <!-- Overlay di autenticazione (visibile solo se non loggato) -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-message">
+            <h2>Accesso Richiesto</h2>
+            <p>Per accedere alle risorse Homebrew e creare le tue campagne personalizzate, devi prima autenticarti.</p>
+            <button class="auth-btn" onclick="showAuthModal()">Accedi ora</button>
+        </div>
+    </div>
+
+    <!-- Contenuto principale (visibile solo se loggato) -->
+    <main id="protected-content" class="content" style="display: none;">
+        <h2>Le Tue Campagne Homebrew</h2>
+        <p>Benvenuto nella tua area personale per la creazione e gestione di campagne homebrew. Qui puoi:</p>
+        <ul>
+            <li>Creare nuove campagne personalizzate</li>
+            <li>Modificare le tue creazioni esistenti</li>
+            <li>Condividere con la community</li>
+            <li>Salvare i tuoi progressi</li>
+        </ul>
+        
+        <div id="user-campaigns">
+            <!-- Le campagne dell'utente verranno caricate qui -->
+        </div>
+        
+        <button id="new-campaign-btn" class="auth-btn" style="margin-top: 2rem;">Crea Nuova Campagna</button>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Dungeons & Friends &copy; 2024 - Tutti i diritti riservati</p>
+        <p class="copyright">Dungeons & Dragons è un marchio registrato di Wizards of the Coast. Questo sito non è affiliato. (tutte le immagini usate sono provenienti da freepik.com)</p>
+    </footer>
+
+    <!-- Script Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        // Configurazione Firebase (usa la stessa del tuo index.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCeuGQvEfydlVt2g8iuGTjW2eY3f75Braw",
+            authDomain: "scuola-progetto.firebaseapp.com",
+            projectId: "scuola-progetto",
+            storageBucket: "scuola-progetto.firebasestorage.app",
+            messagingSenderId: "1008294961950",
+            appId: "1:1008294961950:web:acc331d1a7746627079f0f",
+            measurementId: "G-5GEWLVLGYM"
+        };
+
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Gestione dell'autenticazione
+        auth.onAuthStateChanged((user) => {
+            const authOverlay = document.getElementById('auth-overlay');
+            const protectedContent = document.getElementById('protected-content');
+            const authButton = document.getElementById('user-auth-btn');
+
+            if (user) {
+                // Utente loggato
+                authOverlay.style.display = 'none';
+                protectedContent.style.display = 'block';
+                authButton.textContent = 'Esci';
+                
+                // Carica le campagne dell'utente
+                loadUserCampaigns(user.uid);
+            } else {
+                // Nessun utente loggato
+                authOverlay.style.display = 'flex';
+                protectedContent.style.display = 'none';
+                authButton.textContent = 'Accedi';
+            }
+        });
+
+        // Funzioni per l'autenticazione
+        function handleAuthButton() {
+            if (auth.currentUser) {
+                // Se loggato, esci
+                auth.signOut();
+            } else {
+                // Altrimenti mostra il modale di login
+                showAuthModal();
+            }
+        }
+
+        function showAuthModal() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(error => {
+        console.error("Errore login:", error);
+        alert("Errore durante l'autenticazione");
+    });
+}
+
+
+        // Funzione per caricare le campagne dell'utente
+        function loadUserCampaigns(userId) {
+            // Qui implementerai il caricamento delle campagne dal database
+            // Per ora mostriamo un messaggio di esempio
+            document.getElementById('user-campaigns').innerHTML = 
+                <div style="background: rgba(20, 20, 20, 0.7); padding: 1rem; margin: 1rem 0; border: 1px solid #5a0000;">
+                    <h3>La Mia Prima Campagna</h3>
+                    <p>Stato: In preparazione</p>
+                    <button class="auth-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Modifica</button>
+                </div>
+            ;
+        }
+
+        // Funzione per il menu hamburger
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+            
+            const spans = document.querySelectorAll('.menu-btn span');
+            if (menu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans.forEach(span => {
+                    span.style.transform = '';
+                    span.style.opacity = '';
+                });
+            }
+        }
+
+        // Nuova campagna
+        document.getElementById('new-campaign-btn').addEventListener('click', () => {
+            alert('Funzionalità di creazione campagna sarà implementata qui!');
+        });
+    </script>
+</body>
+</html>
