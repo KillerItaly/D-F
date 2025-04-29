@@ -1,1 +1,1 @@
-# D-F
+# D&F dungeons and Friends è il mio primo progetto personale per creare da 0 un tool per il gioco di ruolo Dungeons and Dragons funzionante, aggiornabile e gratuito il piu possibile. segnato con licenza MIT. per chiuque mi voglia aiutare nel sito trovate tutti i miei contatti sia per collaborare con me, sugerirmi aggiornamenti o altre richieste, non consento a nessuno di prendere il mio progetto o qualsiasi file sorgente tra i codici, le immagini e altro ed utilizarle senza il mio consenso.
